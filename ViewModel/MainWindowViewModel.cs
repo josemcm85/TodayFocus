@@ -75,19 +75,20 @@ namespace TodayFocus.ViewModel
 
         public MainWindowViewModel()
         {
-            MongoCRUD db = new MongoCRUD("SimpleTasks");
+            // MongoCRUD db = new MongoCRUD("SimpleTasks");
+            LoadTasks();
             this.TodayFocusCommand = new TodayFocusCommand(this);
             this.CreateNewGridCommand = new CreateNewGridCommand(this);
             this.CreateNewTaskCommand = new CreateNewTaskCommand(this);
             this.DiscardNewTaskCommand = new DiscardNewTaskCommand(this);
 
-            var Todo = db.LoadRecords<FocusTask>("Tasks");
+            /*var Todo = db.LoadRecords<FocusTask>("Tasks");
             foreach (var item in Todo)
             {
                 Add(new FocusTask(item.Id, item.TaskName, item.TaskDate));
                 Debug.WriteLine(item.TaskName);
 
-            }
+            }*/
 
         }
 
@@ -126,10 +127,14 @@ namespace TodayFocus.ViewModel
             };
           
             db.InsertRecord("Tasks", newFocusTask);
-            Add(newFocusTask);
+            Clear();
+            //Add(newFocusTask);
             NewTaskName = "";
             NewTaskDate = DateTime.Today;
+            LoadTasks();
             TodayFocusBtn();
+            
+            
         }
 
         public void DiscardNewTaskBtn()
@@ -137,6 +142,19 @@ namespace TodayFocus.ViewModel
             NewTaskName = "";
             NewTaskDate = DateTime.Today;
             TodayFocusBtn();
+        }
+
+        public void LoadTasks()
+        {
+            MongoCRUD db = new MongoCRUD("SimpleTasks");
+            var Todo = db.LoadRecords<FocusTask>("Tasks");
+            foreach (var item in Todo)
+            {
+                Add(new FocusTask(item.Id, item.TaskName, item.TaskDate));
+                Debug.WriteLine(item.TaskName);
+
+            }
+
         }
 
     }
