@@ -9,6 +9,7 @@
 //------------------------------------------------------------------------------
 
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/delete.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/edit.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/save.png")]
 
 

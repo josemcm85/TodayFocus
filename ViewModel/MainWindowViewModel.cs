@@ -15,10 +15,22 @@ namespace TodayFocus.ViewModel
     public class MainWindowViewModel : ObservableCollection<FocusTask>, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        
-        private bool _VisibilityListToday;
-              
+        MongoCRUD db = new MongoCRUD("SimpleTasks");
 
+        private bool _VisibilityEditGrid;
+
+        public bool VisibilityEditGrid
+        {
+            get { return _VisibilityEditGrid; }
+            set { _VisibilityEditGrid = value;
+                OnPropertyChanged("VisibilityEditGrid");
+            }
+        }
+
+
+        private bool _VisibilityListToday;
+
+        
         public bool VisibilityListToday
         {
             get { return _VisibilityListToday; }
@@ -66,30 +78,40 @@ namespace TodayFocus.ViewModel
             }
         }
 
+        private FocusTask _taskEdit;
+
+        public FocusTask TaskEdit
+        {
+            get { return _taskEdit; }
+            set { _taskEdit = value;
+                OnPropertyChanged("TaskEdit");
+            }
+        }
+
+
         public CreateNewGridCommand CreateNewGridCommand { get; set; }
         public TodayFocusCommand TodayFocusCommand { get; set; }
 
         public CreateNewTaskCommand CreateNewTaskCommand { get; set; }
 
         public DiscardNewTaskCommand DiscardNewTaskCommand { get; set; }
+        public DeleteTaskCommand DeleteTaskCommand { get; set; }
+        public EditTaskCommand EditTaskCommand { get; set; }
+        public SubmitChangesCommand SubmitChangesCommand { get; set; }
+        public DiscardChangesCommand DiscardChangesCommand { get; set; }
+
 
         public MainWindowViewModel()
         {
-            // MongoCRUD db = new MongoCRUD("SimpleTasks");
             LoadTasks();
             this.TodayFocusCommand = new TodayFocusCommand(this);
             this.CreateNewGridCommand = new CreateNewGridCommand(this);
             this.CreateNewTaskCommand = new CreateNewTaskCommand(this);
             this.DiscardNewTaskCommand = new DiscardNewTaskCommand(this);
-
-            /*var Todo = db.LoadRecords<FocusTask>("Tasks");
-            foreach (var item in Todo)
-            {
-                Add(new FocusTask(item.Id, item.TaskName, item.TaskDate));
-                Debug.WriteLine(item.TaskName);
-
-            }*/
-
+            this.DeleteTaskCommand = new DeleteTaskCommand(this);
+            this.EditTaskCommand = new EditTaskCommand(this);
+            this.SubmitChangesCommand = new SubmitChangesCommand(this);
+            this.DiscardChangesCommand = new DiscardChangesCommand(this);
         }
 
         private void OnPropertyChanged(string propertyName)
@@ -104,6 +126,7 @@ namespace TodayFocus.ViewModel
         {
                    
             this.VisibilityCreateNew = false;
+            this.VisibilityEditGrid = false;
             this.VisibilityListToday = true;
            
         }
@@ -112,13 +135,14 @@ namespace TodayFocus.ViewModel
         {
             
             this.VisibilityListToday = false;
+            this.VisibilityEditGrid = false;
             this.VisibilityCreateNew = true;
 
         }
 
         public void CreateNewTaskBtn()
         {
-            MongoCRUD db = new MongoCRUD("SimpleTasks");
+            
             FocusTask newFocusTask = new FocusTask
             {
                 TaskName = NewTaskName,
@@ -128,7 +152,7 @@ namespace TodayFocus.ViewModel
           
             db.InsertRecord("Tasks", newFocusTask);
             Clear();
-            //Add(newFocusTask);
+            
             NewTaskName = "";
             NewTaskDate = DateTime.Today;
             LoadTasks();
@@ -146,7 +170,7 @@ namespace TodayFocus.ViewModel
 
         public void LoadTasks()
         {
-            MongoCRUD db = new MongoCRUD("SimpleTasks");
+            //MongoCRUD db = new MongoCRUD("SimpleTasks");
             var Todo = db.LoadRecords<FocusTask>("Tasks");
             foreach (var item in Todo)
             {
@@ -156,6 +180,38 @@ namespace TodayFocus.ViewModel
             }
 
         }
+
+        public void DeleteTaskBtn(FocusTask FocusTask)
+        {
+            db.DeleteRecord<FocusTask>("Tasks", FocusTask.Id);
+            Remove(FocusTask);
+
+        }
+
+        public void EditTaskBtn(FocusTask FocusTask)
+        {
+            this.TaskEdit = FocusTask;
+            this.VisibilityListToday = false;
+            this.VisibilityCreateNew = false;
+            this.VisibilityEditGrid = true;
+
+        }
+
+        public void SubmitChangesBtn(FocusTask FocusTask)
+        {
+            db.UpsertRecord<FocusTask>("Tasks", FocusTask.Id, FocusTask);
+            Clear();
+            LoadTasks();
+            TodayFocusBtn();
+        }
+
+        public void DiscardChangesBtn()
+        {
+            Clear();
+            LoadTasks();
+            TodayFocusBtn();
+        }
+
 
     }
 

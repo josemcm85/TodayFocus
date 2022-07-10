@@ -41,3 +41,4 @@ C:\Code\Projects\TodayFocus\TodayFocus\bin\Debug\net5.0-windows\runtimes\linux\n
 C:\Code\Projects\TodayFocus\TodayFocus\bin\Debug\net5.0-windows\runtimes\osx\native\libmongocrypt.dylib
 C:\Code\Projects\TodayFocus\TodayFocus\bin\Debug\net5.0-windows\runtimes\win\native\mongocrypt.dll
 C:\Code\Projects\TodayFocus\TodayFocus\obj\Debug\net5.0-windows\TodayFocus.csproj.CopyComplete
+C:\Code\Projects\TodayFocus\TodayFocus\bin\Debug\net5.0-windows\Images\Edit.png
