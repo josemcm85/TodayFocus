@@ -18,65 +18,152 @@
     
     <Grid DataContext="{Binding Source={StaticResource FocusTask}}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
             <ColumnDefinition/>
+            <ColumnDefinition Width="170"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="75"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Today Focus"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Left"
-                       Foreground="White"
-                       FontSize="22"
-                       Margin="20,0,0,0"/>
-        <StackPanel Grid.Row="1">
-            <Button Content="Today" 
-                    Height="50" 
-                    Background="Purple" 
-                    BorderBrush="Purple" 
-                    Foreground="White" 
-                    FontSize="16" 
-                    Command="{Binding TodayFocusCommand, Source={StaticResource MainWindowVM}}"/>
-                    
-            
-        </StackPanel>
-        <StackPanel Grid.Column="1" Orientation="Horizontal">
-            <Grid Width="20"></Grid>
-            <Button Content="Create New Task" 
-                    Width="200" 
-                    Height="50" 
-                    Background="Blue" 
-                    BorderBrush="Purple" 
+        
+        <StackPanel Grid.Column="0" Orientation="Horizontal">
+
+            <Button Content="Today Focus"
+                    Width="150"
+                    Height="40"
+                    Foreground="White"
+                    FontSize="16"
+                    Margin="10,0,0,0"
+                    Command="{Binding TodayFocusCommand, Source={StaticResource MainWindowVM}}">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="#4e99ff"/>
+                        <Setter Property="BorderBrush" Value="White"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}">
+                                        <Border.Style>
+                                            <Style TargetType="{x:Type Border}">
+                                                <Setter Property="BorderBrush" Value="White"/>
+                                            </Style>
+                                        </Border.Style>
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#844eff"/>
+  
+                            </Trigger>
+                        </Style.Triggers>
+
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Content="All Tasks"
+                    Width="150"
+                    Height="40" 
                     Foreground="White" 
                     FontSize="16"
-                    Command="{Binding CreateNewGridCommand, Source={StaticResource MainWindowVM}}"/>
+                    Margin="10,0,0,0"
+                    Command="{Binding AllTasksCommand, Source={StaticResource MainWindowVM}}">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="#4e99ff"/>
+                        <Setter Property="BorderBrush" Value="White"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}">
+                                        <Border.Style>
+                                            <Style TargetType="{x:Type Border}">
+                                                <Setter Property="BorderBrush" Value="White"/>
+                                            </Style>
+                                        </Border.Style>
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#844eff"/>
+
+                            </Trigger>
+
+                        </Style.Triggers>
+
+                    </Style>
+                </Button.Style>
+            </Button>
+
+
         </StackPanel>
+        <Button Content="Create New Task"
+                    Grid.Column="1"
+                    Width="150" 
+                    Height="40" 
+
+                    Foreground="White" 
+                    FontSize="16"
+                    Margin="10,0,10,0"
+                    Command="{Binding CreateNewGridCommand, Source={StaticResource MainWindowVM}}">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="#4e99ff"/>
+                    <Setter Property="BorderBrush" Value="White"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#844eff"/>
+
+                        </Trigger>
+                    </Style.Triggers>
+
+                </Style>
+            </Button.Style>
+        </Button>
         <Grid x:Name="TodayListTasksGrid" 
               Grid.Row="1" 
-              Grid.Column="1" 
+              Grid.ColumnSpan="2"
               Visibility="{Binding VisibilityListToday, Source={StaticResource MainWindowVM}, Converter={StaticResource BoolToVis}}">
             <StackPanel>
                 <ListView DataContext="{Binding Source={StaticResource MainWindowVM}}" ItemsSource="{Binding}" Background="#FF1E1D21" BorderBrush="#FF1E1D21">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate >
-                            <Grid Background="#353340" Height="50" Width="570">
+                            <Grid Background="#353340" Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="40"/>
                                     <ColumnDefinition Width="40"/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Orientation="Horizontal" Grid.Column="0">
-                                    <TextBlock Text="{Binding TaskDate}" VerticalAlignment="Center" Foreground="White" Margin="20,0,0,0"></TextBlock>
-                                    <TextBlock Text="{Binding TaskName}" VerticalAlignment="Center" Foreground="White" Margin="20,0,0,0"></TextBlock>
+                                    <TextBlock Text="{Binding TaskDate, StringFormat=dd-MM-yyyy}" VerticalAlignment="Center" Foreground="White" Margin="20,0,0,0" FontSize="16"></TextBlock>
+                                    <TextBlock Text="{Binding TaskName}" VerticalAlignment="Center" Foreground="White" Margin="20,0,0,0" FontSize="16"></TextBlock>
                                 </StackPanel>
                                     <Button x:Name="EditTaskBtn" 
                                             Grid.Column="1"
+                                            
                                             Command="{Binding EditTaskCommand, Source={StaticResource MainWindowVM}}" CommandParameter="{Binding Mode=OneWay}">
                                         <Button.Style>
                                             <Style TargetType="{x:Type Button}">
-                                                <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="Background" Value="#FFE4B43C"/>
                                                 <Setter Property="Template">
                                                     <Setter.Value>
                                                         <ControlTemplate TargetType="{x:Type Button}">
@@ -95,10 +182,10 @@
                                         </Button.Style>
                                         <Image Source="/Images/edit.png" Height="30" Width="30" />
                                     </Button>
-                                <Button x:Name="DeleteTaskBtn" Grid.Column="2" Command="{Binding DeleteTaskCommand, Source={StaticResource MainWindowVM}}" CommandParameter="{Binding Mode=OneWay}">
+                                <Button x:Name="DeleteTaskBtn"  Grid.Column="2" Command="{Binding DeleteTaskCommand, Source={StaticResource MainWindowVM}}" CommandParameter="{Binding Mode=OneWay}">
                                         <Button.Style>
                                             <Style TargetType="{x:Type Button}">
-                                                <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="Background" Value="#FFE4B43C"/>
                                                 <Setter Property="Template">
                                                     <Setter.Value>
                                                         <ControlTemplate TargetType="{x:Type Button}">
@@ -125,9 +212,86 @@
                 </ListView>
             </StackPanel>
         </Grid>
+        <Grid x:Name="AllListTasksGrid" 
+              Grid.Row="1" 
+              Grid.ColumnSpan="2"
+              Visibility="{Binding VisibilityAllList, Source={StaticResource MainWindowVM}, Converter={StaticResource BoolToVis}}">
+            <StackPanel>
+                <ListView DataContext="{Binding Source={StaticResource MainWindowVM}}" ItemsSource="{Binding}" Background="#FF1E1D21" BorderBrush="#FF1E1D21">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Background="#353340" Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="40"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                                    <TextBlock Text="{Binding TaskDate, StringFormat=dd-MM-yyyy}" VerticalAlignment="Center" Foreground="White" Margin="20,0,0,0" FontSize="16"></TextBlock>
+                                    <TextBlock Text="{Binding TaskName}" VerticalAlignment="Center" Foreground="White" Margin="20,0,0,0" FontSize="16" ></TextBlock>
+                                </StackPanel>
+                                <Button x:Name="EditTaskBtn" 
+                                            Grid.Column="1"
+                                            Command="{Binding EditTaskCommand, Source={StaticResource MainWindowVM}}" CommandParameter="{Binding Mode=OneWay}">
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Setter Property="Background" Value="#FFE4B43C"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type Button}">
+                                                        <Border Background="{TemplateBinding Background}">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#844eff"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                    <Image Source="/Images/edit.png" Height="30" Width="30" />
+                                </Button>
+                                <Button x:Name="DeleteTaskBtn" Grid.Column="2" Command="{Binding DeleteTaskCommand, Source={StaticResource MainWindowVM}}" CommandParameter="{Binding Mode=OneWay}">
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Setter Property="Background" Value="#FFE4B43C"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type Button}">
+                                                        <Border Background="{TemplateBinding Background}">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#844eff"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                    <Image Source="/Images/Delete.png" Height="30" Width="30" />
+                                </Button>
+
+                            </Grid>
+
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+        </Grid>
         <Grid x:Name="CreateNewTaskGrid" 
               Grid.Row="1" 
-              Grid.Column="1" 
+               Grid.ColumnSpan="2"
               Visibility="{Binding VisibilityCreateNew, Source={StaticResource MainWindowVM}, Converter={StaticResource BoolToVis}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -139,7 +303,8 @@
                 <RowDefinition Height="90"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Border CornerRadius="10"
+            <Label Content="TASK NAME" HorizontalAlignment="Left" Height="25" Margin="20,0,0,0" VerticalAlignment="Top" Width="141" Foreground="White"/>
+            <Border 
                             Background="#353340"
                             Width="400"
                             Height="40"
@@ -150,22 +315,38 @@
                          VerticalContentAlignment="Center"
                          Foreground="White"
                          BorderBrush="Transparent"
+                         BorderThickness="0"
                          Margin="5,0,5,0"
-                         FontSize="14"
+                         FontSize="16"
                          Background="#353340"
                          Text="{Binding NewTaskName, Source={StaticResource MainWindowVM}, Mode=TwoWay}"
                  />
                 <!--Text="{Binding NewTaskDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"-->
             </Border>
-            <Calendar HorizontalAlignment="Left"
-                  Margin="20,0,0,0"
-                  VerticalAlignment="Top"
-                  Grid.Row="2"
-                  BorderBrush="#FF1E1D21"
-                  Background="White"
-                  SelectedDate="{Binding NewTaskDate, Source={StaticResource MainWindowVM}, Mode=TwoWay}"
-            />
-            <!--SelectedDate="{Binding NewTaskDate}"-->
+            <DatePicker Grid.Row="2"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Width="150"
+                        
+                        FontSize="16"
+                        BorderBrush="Transparent"
+                        Foreground="White"
+                        Margin="20,0,0,0"
+                        SelectedDate="{Binding NewTaskDate, Source={StaticResource MainWindowVM}, Mode=TwoWay}">
+                <DatePicker.Style>
+                    <Style TargetType="{x:Type DatePicker}">
+                        <Style.Resources>
+                            <Style TargetType="DatePickerTextBox">
+                                <Setter Property="Background" Value="#353340"/>
+                                <Setter Property="Foreground" Value="White"/>
+
+                            </Style>
+
+                        </Style.Resources>
+                    </Style>
+                </DatePicker.Style>
+            </DatePicker>
+                      
 
             <Button x:Name="BtnDiscardNewTask" 
                     Grid.Column="3" 
@@ -234,7 +415,7 @@
         </Grid>
         <Grid x:Name="EditTaskGrid"
               Grid.Row="1" 
-              Grid.Column="1" 
+              Grid.ColumnSpan="2" 
               Visibility="{Binding VisibilityEditGrid, Source={StaticResource MainWindowVM}, Converter={StaticResource BoolToVis}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -246,7 +427,8 @@
                 <RowDefinition Height="90"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Border CornerRadius="10"
+            <Label Content="TASK NAME" HorizontalAlignment="Left" Height="25" Margin="20,0,0,0" VerticalAlignment="Top" Width="141" Foreground="White"/>
+            <Border 
                             Background="#353340"
                             Width="400"
                             Height="40"
@@ -257,22 +439,38 @@
                          VerticalContentAlignment="Center"
                          Foreground="White"
                          BorderBrush="Transparent"
+                         BorderThickness="0"
                          Margin="5,0,5,0"
-                         FontSize="14"
+                         FontSize="16"
                          Background="#353340"
                          Text="{Binding TaskEdit.TaskName, Source={StaticResource MainWindowVM}}"
                  />
-                <!--Text="{Binding NewTaskDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"-->
+                
             </Border>
-            <Calendar HorizontalAlignment="Left"
-                  Margin="20,0,0,0"
-                  VerticalAlignment="Top"
-                  Grid.Row="2"
-                  BorderBrush="#FF1E1D21"
-                  Background="White"
-                  SelectedDate="{Binding TaskEdit.TaskDate, Source={StaticResource MainWindowVM}}"
-            />
-            <!--SelectedDate="{Binding NewTaskDate}"-->
+            
+            <DatePicker Grid.Row="2"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Width="150"
+                        FontSize="16"
+                        BorderBrush="Transparent"
+                        VerticalContentAlignment="Center"
+                        Foreground="White"
+                        Margin="20,0,0,0"
+                        SelectedDate="{Binding TaskEdit.TaskDate, Source={StaticResource MainWindowVM}}">
+                <DatePicker.Style>
+                    <Style TargetType="{x:Type DatePicker}">
+                        <Style.Resources>
+                            <Style TargetType="DatePickerTextBox">
+                                <Setter Property="Background" Value="#353340"/>                                                          
+                                <Setter Property="Foreground" Value="White"/>
+                             
+                            </Style>
+                            
+                        </Style.Resources>
+                    </Style>
+                </DatePicker.Style>
+            </DatePicker>
 
             <Button x:Name="BtnDiscardChanges" 
                     Grid.Column="3" 

@@ -23,7 +23,7 @@ namespace TodayFocus.Model
 
         private DateTime _TaskDate;
 
-        public DateTime  TaskDate
+        public DateTime TaskDate
         {
             get { return _TaskDate; }
             set { 

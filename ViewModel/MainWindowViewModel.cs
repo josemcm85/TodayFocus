@@ -40,6 +40,17 @@ namespace TodayFocus.ViewModel
             }
         }
 
+        private bool _VisibilityAllList;
+
+        public bool VisibilityAllList
+        {
+            get { return _VisibilityAllList; }
+            set { _VisibilityAllList = value;
+                OnPropertyChanged("VisibilityAllList");
+            }
+        }
+
+
         private bool _VisibilityCreateNew;
 
         public bool VisibilityCreateNew
@@ -99,11 +110,12 @@ namespace TodayFocus.ViewModel
         public EditTaskCommand EditTaskCommand { get; set; }
         public SubmitChangesCommand SubmitChangesCommand { get; set; }
         public DiscardChangesCommand DiscardChangesCommand { get; set; }
+        public AllTasksCommand AllTasksCommand { get; set; }
 
 
         public MainWindowViewModel()
         {
-            LoadTasks();
+            
             this.TodayFocusCommand = new TodayFocusCommand(this);
             this.CreateNewGridCommand = new CreateNewGridCommand(this);
             this.CreateNewTaskCommand = new CreateNewTaskCommand(this);
@@ -112,6 +124,8 @@ namespace TodayFocus.ViewModel
             this.EditTaskCommand = new EditTaskCommand(this);
             this.SubmitChangesCommand = new SubmitChangesCommand(this);
             this.DiscardChangesCommand = new DiscardChangesCommand(this);
+            this.AllTasksCommand = new AllTasksCommand(this);
+            TodayFocusBtn();
         }
 
         private void OnPropertyChanged(string propertyName)
@@ -124,11 +138,24 @@ namespace TodayFocus.ViewModel
 
         public void TodayFocusBtn()
         {
-                   
+            
+            LoadTodayTasks();
             this.VisibilityCreateNew = false;
             this.VisibilityEditGrid = false;
+            this.VisibilityAllList = false;
             this.VisibilityListToday = true;
            
+        }
+
+        public void AllTasksBtn()
+        {
+            LoadAllTasks();
+            this.VisibilityCreateNew = false;
+            this.VisibilityEditGrid = false;
+            this.VisibilityListToday = false;
+            this.VisibilityAllList = true;
+                       
+
         }
 
         public void CreateNewGridBtn()
@@ -136,6 +163,7 @@ namespace TodayFocus.ViewModel
             
             this.VisibilityListToday = false;
             this.VisibilityEditGrid = false;
+            this.VisibilityAllList = false;
             this.VisibilityCreateNew = true;
 
         }
@@ -151,11 +179,10 @@ namespace TodayFocus.ViewModel
             };
           
             db.InsertRecord("Tasks", newFocusTask);
-            Clear();
-            
+                        
             NewTaskName = "";
             NewTaskDate = DateTime.Today;
-            LoadTasks();
+            
             TodayFocusBtn();
             
             
@@ -168,16 +195,31 @@ namespace TodayFocus.ViewModel
             TodayFocusBtn();
         }
 
-        public void LoadTasks()
+        public void LoadTodayTasks()
         {
-            //MongoCRUD db = new MongoCRUD("SimpleTasks");
-            var Todo = db.LoadRecords<FocusTask>("Tasks");
+            
+            Clear();
+            var Todo = db.LoadRecords<FocusTask>("Tasks").OrderBy(i => i.TaskDate);
             foreach (var item in Todo)
             {
-                Add(new FocusTask(item.Id, item.TaskName, item.TaskDate));
-                Debug.WriteLine(item.TaskName);
+                if(item.TaskDate.Date == DateTime.Today.Date)
+                    Add(new FocusTask(item.Id, item.TaskName, item.TaskDate));                 
 
             }
+
+        }
+
+        public void LoadAllTasks()
+        {
+            
+            Clear();
+            var Todo = db.LoadRecords<FocusTask>("Tasks").OrderBy(i => i.TaskDate);
+            foreach (var item in Todo)
+            {                
+               Add(new FocusTask(item.Id, item.TaskName, item.TaskDate));
+            }
+
+            
 
         }
 
@@ -193,6 +235,7 @@ namespace TodayFocus.ViewModel
             this.TaskEdit = FocusTask;
             this.VisibilityListToday = false;
             this.VisibilityCreateNew = false;
+            this.VisibilityAllList = false;
             this.VisibilityEditGrid = true;
 
         }
@@ -200,17 +243,17 @@ namespace TodayFocus.ViewModel
         public void SubmitChangesBtn(FocusTask FocusTask)
         {
             db.UpsertRecord<FocusTask>("Tasks", FocusTask.Id, FocusTask);
-            Clear();
-            LoadTasks();
+
             TodayFocusBtn();
         }
 
         public void DiscardChangesBtn()
         {
-            Clear();
-            LoadTasks();
+
             TodayFocusBtn();
         }
+
+
 
 
     }
