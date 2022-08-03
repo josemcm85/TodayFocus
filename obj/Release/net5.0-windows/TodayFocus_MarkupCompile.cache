@@ -1,18 +1,18 @@
 ﻿TodayFocus
-1.0.0.0
+
 
 winexe
 C#
 .cs
-C:\Code\Projects\TodayFocus\TodayFocus\obj\Debug\net5.0-windows\
+C:\Code\Projects\TodayFocus\TodayFocus\obj\Release\net5.0-windows\
 TodayFocus
 none
 false
-TRACE;DEBUG;NET;NET5_0;NETCOREAPP
+TRACE;RELEASE;NET;NET5_0;NETCOREAPP
 C:\Code\Projects\TodayFocus\TodayFocus\App.xaml
 11407045341
 3-650088829
-17-113164767
+15527611397
 1996174988
 MainWindow.xaml;
 
